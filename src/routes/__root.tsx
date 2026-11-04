@@ -7,12 +7,10 @@ import {
 } from '@tanstack/react-router';
 import type { QueryClient } from '@tanstack/react-query';
 import type * as React from 'react';
-import { ThemeProvider } from 'next-themes';
 import { DefaultCatchBoundary } from '~/components/DefaultCatchBoundary';
 import { NotFound } from '~/components/NotFound';
-import { Toaster } from '~/components/ui/sonner';
-import { TooltipProvider } from '~/components/ui/tooltip';
 import { site } from '~/lib/site';
+import { fontPreloads, themeCss } from '~/lib/theme';
 import { seo } from '~/utils/seo';
 import '~/styles/app.css';
 
@@ -23,7 +21,8 @@ export const Route = createRootRouteWithContext<{
   head: () => ({
     meta: [
       { charSet: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      { name: 'viewport', content: 'width=device-width, initial-scale=1, viewport-fit=cover' },
+      { name: 'theme-color', content: '#EEEEEB' },
       ...(site.googleSiteVerification
         ? [
             {
@@ -34,7 +33,14 @@ export const Route = createRootRouteWithContext<{
         : []),
       ...seo({ title: site.name, description: site.description }).meta
     ],
-    links: [{ rel: 'icon', href: '/favicon.ico' }]
+    links: [
+      ...fontPreloads(),
+      { rel: 'icon', href: '/favicon.ico', sizes: '48x48' },
+      { rel: 'icon', href: '/logo.svg', type: 'image/svg+xml' },
+      { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
+      { rel: 'manifest', href: '/site.webmanifest' }
+    ],
+    styles: [{ children: themeCss() }]
   }),
   errorComponent: (props) => (
     <RootDocument>
@@ -55,22 +61,12 @@ function RootComponent() {
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html lang='en' suppressHydrationWarning>
+    <html lang='en'>
       <head>
         <HeadContent />
       </head>
       <body>
-        <ThemeProvider
-          attribute='class'
-          defaultTheme='system'
-          enableSystem
-          disableTransitionOnChange
-        >
-          <TooltipProvider>
-            {children}
-            <Toaster />
-          </TooltipProvider>
-        </ThemeProvider>
+        {children}
         <Scripts />
       </body>
     </html>

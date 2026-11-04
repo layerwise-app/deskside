@@ -1,0 +1,36 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "unicorn", "oxc", "react", "jsx-a11y"],
+  "categories": { "correctness": "error", "suspicious": "warn" },
+  "env": { "browser": true, "node": true, "es2024": true },
+  "rules": {
+    "react/rules-of-hooks": "error",
+    "react/exhaustive-deps": "warn",
+    "react/react-in-jsx-scope": "off",
+    // These assume the React Compiler, which this project does not use.
+    "react/set-state-in-effect": "off",
+    "react/immutability": "off",
+    "react/refs": "off",
+    "react/exhaustive-effect-dependencies": "off",
+    // `role='list'` keeps list semantics in Safari when bullets are removed,
+    // and the live demos use ARIA roles on custom widgets on purpose.
+    "jsx-a11y/no-redundant-roles": "off",
+    "jsx-a11y/prefer-tag-over-role": "off",
+    // Style preferences; every sort and reverse here runs on a fresh copy.
+    "unicorn/no-array-sort": "off",
+    "unicorn/no-array-reverse": "off",
+    "unicorn/consistent-function-scoping": "off",
+    "no-unused-vars": ["error", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }]
+  },
+  "ignorePatterns": [
+    ".output/**",
+    ".wrangler/**",
+    ".tanstack/**",
+    ".layerwise/**",
+    "dist/**",
+    "drizzle/**",
+    "src/routeTree.gen.ts",
+    "worker-configuration.d.ts",
+    "src/components/ui/**"
+  ]
+}

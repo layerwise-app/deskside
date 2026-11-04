@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <title>Deskside</title>
+  <defs>
+    <radialGradient id="paper" cx="50%" cy="32%" r="80%">
+      <stop offset="0" stop-color="#FBFBF9"/>
+      <stop offset="0.55" stop-color="#EEEEEB"/>
+      <stop offset="1" stop-color="#DEDEDA"/>
+    </radialGradient>
+    <linearGradient id="top" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F6F2E8"/>
+      <stop offset="1" stop-color="#E4DCC8"/>
+    </linearGradient>
+    <linearGradient id="shine" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.95"/>
+      <stop offset="0.22" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="led" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#E0482B" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#E0482B" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="150%">
+      <feGaussianBlur stdDeviation="26"/>
+    </filter>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#paper)"/>
+  <!-- shadow on the desk -->
+  <rect x="170" y="250" width="700" height="660" rx="110" fill="#2D2619" opacity="0.34" filter="url(#soft)"/>
+  <!-- skirt -->
+  <rect x="128" y="140" width="768" height="752" rx="112" fill="#A69C84"/>
+  <rect x="128" y="132" width="768" height="738" rx="112" fill="#BFB59D"/>
+  <!-- top face -->
+  <rect x="128" y="112" width="768" height="700" rx="104" fill="url(#top)"/>
+  <rect x="136" y="120" width="752" height="684" rx="96" fill="none" stroke="url(#shine)" stroke-width="12"/>
+  <!-- legend: D -->
+  <path d="M300 352 H410 A140 140 0 0 1 550 492 V576 A140 140 0 0 1 410 716 H300 Z" fill="none" stroke="#2A2620" stroke-width="100" stroke-linejoin="miter"/>
+  <!-- the light on the selected key -->
+  <circle cx="770" cy="240" r="92" fill="url(#led)"/>
+  <circle cx="770" cy="240" r="38" fill="#E0482B"/>
+</svg>

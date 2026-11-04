@@ -1,0 +1,329 @@
+/* The home page: one screen with the desk, and the plain text index. */
+
+.desk-stage {
+  position: relative;
+  height: 100svh;
+  min-height: 560px;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  container-type: size;
+  /* The same paper sweep the scene draws, so nothing jumps while it loads. */
+  background:
+    radial-gradient(120% 70% at 50% 30%, #fbfbf9 0%, var(--ds-paper) 45%, var(--ds-paper-deep) 100%);
+}
+.desk-stage[data-dragging='true'],
+.desk-stage [data-dragging='true'] {
+  cursor: grabbing;
+}
+
+.desk-canvas,
+.desk-poster {
+  position: absolute;
+  inset: 0;
+}
+.desk-canvas {
+  opacity: 0;
+  transition: opacity 500ms var(--ease-out);
+  cursor: grab;
+}
+.desk-canvas[data-ready='true'] {
+  opacity: 1;
+}
+
+/* A rendered still of the scene, matched to the camera's framing. */
+.desk-poster img {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  height: min(100cqh, 100cqw / 1.6);
+  width: auto;
+  max-width: none;
+  transform: translate(-50%, -50%);
+}
+.desk-poster[data-hidden='true'] {
+  opacity: 0;
+  transition: opacity 500ms var(--ease-out) 200ms;
+}
+
+.desk-screen-link {
+  position: absolute;
+  border-radius: 14px;
+  -webkit-user-drag: none;
+  cursor: pointer;
+}
+.desk-screen-link:focus-visible {
+  outline: 2px solid var(--ds-ink);
+  outline-offset: 10px;
+}
+
+.desk-veil {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  opacity: 0;
+}
+
+/* Corner labels. */
+.corner {
+  position: absolute;
+  z-index: 2;
+  max-width: 34ch;
+}
+.corner-tl {
+  left: var(--gutter);
+  top: 20px;
+}
+.corner-tr {
+  right: var(--gutter);
+  top: 20px;
+  text-align: right;
+}
+.corner-bl {
+  left: var(--gutter);
+  bottom: 22px;
+}
+.corner-br {
+  right: var(--gutter);
+  bottom: 22px;
+  text-align: right;
+}
+.corner a,
+.corner button {
+  pointer-events: auto;
+}
+/* When the keys leave no room beside them, the bottom corners move up above
+   the keys. The width that needs depends on the number of keys, so the rule
+   is written by Desk.tsx. */
+
+.desk-toggle {
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Labels and keys step aside while the camera moves into the screen. */
+.desk-stage .corner,
+.desk-stage .keys {
+  transition: opacity 240ms var(--ease-out);
+}
+.desk-stage[data-opening='true'] .corner,
+.desk-stage[data-opening='true'] .keys {
+  opacity: 0;
+  pointer-events: none;
+}
+.desk-stage[data-opening='true'] .keys > li {
+  pointer-events: none;
+}
+
+/* The row of keys. */
+.keys {
+  --key-w: 104px;
+  --key-gap: 10px;
+  position: absolute;
+  z-index: 3;
+  left: var(--gutter);
+  right: var(--gutter);
+  bottom: 26px;
+  display: flex;
+  justify-content: center;
+  gap: var(--key-gap);
+  pointer-events: none;
+}
+/* Keys keep their size and only shrink when there is no other way to fit. */
+.keys > li {
+  flex: 0 1 var(--key-w);
+  min-width: 0;
+  pointer-events: auto;
+}
+.key {
+  --top: #f3eee2;
+  --face: #e6dfcd;
+  --skirt: #bfb59d;
+  --skirt-deep: #a69c84;
+  position: relative;
+  width: 100%;
+  height: 58px;
+  padding: 8px 10px 7px;
+  border: 0;
+  border-radius: 7px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  text-align: left;
+  color: #3a362e;
+  background: linear-gradient(180deg, var(--top), var(--face));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -2px 0 rgba(90, 80, 60, 0.07),
+    0 4px 0 var(--skirt),
+    0 5px 0 var(--skirt-deep),
+    0 10px 16px -6px rgba(45, 38, 25, 0.42);
+  transform: translateY(0);
+  transition:
+    transform 110ms var(--ease-out),
+    box-shadow 110ms var(--ease-out);
+}
+.key:hover {
+  --top: #f7f3ea;
+}
+.key:active,
+.key[data-down='true'] {
+  transform: translateY(4px);
+  transition-duration: 40ms;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    inset 0 -1px 0 rgba(90, 80, 60, 0.06),
+    0 0 0 var(--skirt),
+    0 1px 0 var(--skirt-deep),
+    0 3px 6px -3px rgba(45, 38, 25, 0.45);
+}
+.key:focus-visible {
+  outline-offset: 6px;
+}
+.key-num {
+  opacity: 0.62;
+}
+.key-label {
+  /* Tighter than other labels so twelve characters fit on a full-size key. */
+  letter-spacing: 0.02em;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* A small light on the selected key, like caps lock. */
+.key::after {
+  content: '';
+  position: absolute;
+  right: 9px;
+  top: 10px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #b8ae96;
+  transition: background 160ms, box-shadow 160ms;
+}
+.key[aria-pressed='true']::after {
+  background: var(--ds-accent);
+  box-shadow: 0 0 6px 1px color-mix(in srgb, var(--ds-accent) 70%, transparent);
+}
+
+@media (max-width: 1279px) {
+  .keys {
+    --key-w: 92px;
+  }
+  .key {
+    padding-inline: 8px;
+  }
+}
+@media (max-width: 1023px) {
+  .keys {
+    --key-w: 80px;
+    --key-gap: 7px;
+  }
+  .key {
+    height: 54px;
+    padding: 7px 8px 6px;
+  }
+}
+
+/* The plain text index: the page on phones and with reduced motion,
+   and one keypress away on the desk. */
+.desk-index {
+  display: none;
+  min-height: 100dvh;
+}
+.desk[data-view='index'] .desk-stage {
+  display: none;
+}
+.desk[data-view='index'] .desk-index {
+  display: flex;
+}
+@media (max-width: 767px), (prefers-reduced-motion: reduce) {
+  .desk[data-view='auto'] .desk-stage {
+    display: none;
+  }
+  .desk[data-view='auto'] .desk-index {
+    display: flex;
+  }
+}
+@media (max-width: 767px) {
+  .desk[data-view='desk'] .desk-stage {
+    display: none;
+  }
+  .desk[data-view='desk'] .desk-index {
+    display: flex;
+  }
+  .desk-only {
+    display: none !important;
+  }
+}
+/* The still of the desk heads the index when there is no live desk. */
+.desk[data-live='true'] .index-still {
+  display: none;
+}
+
+.index-row {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1.3fr) minmax(0, 1fr) minmax(0, 1fr) 56px 20px;
+  gap: 16px;
+  align-items: baseline;
+  padding: 14px 0 15px;
+  border-top: 1px solid var(--ds-line);
+}
+.index-row:last-child {
+  border-bottom: 1px solid var(--ds-line);
+}
+.index-row .index-title {
+  transition: transform 220ms var(--ease-out);
+}
+.index-row:hover .index-title,
+.index-row:focus-visible .index-title {
+  transform: translateX(6px);
+}
+.index-row .index-arrow {
+  opacity: 0;
+  transition: opacity 160ms;
+}
+.index-row:hover .index-arrow,
+.index-row:focus-visible .index-arrow {
+  opacity: 1;
+}
+.index-swatch {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  margin-right: 10px;
+  transform: translateY(-1px);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12);
+}
+@media (max-width: 767px) {
+  .index-row {
+    grid-template-columns: 32px minmax(0, 1fr) auto;
+    row-gap: 4px;
+    padding: 16px 0 18px;
+  }
+  .index-row .index-kind,
+  .index-row .index-summary {
+    grid-column: 2 / -1;
+  }
+  .index-row .index-client,
+  .index-row .index-arrow {
+    display: none;
+  }
+  .index-row .index-year {
+    grid-column: 3;
+    grid-row: 1;
+  }
+}
