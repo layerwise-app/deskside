@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router';
 import { Clock } from '~/components/site/Clock';
 import { Fortune } from '~/components/site/Fortune';
+import { PoweredBy } from '~/components/site/PoweredBy';
 import { Picture } from '~/components/site/Picture';
 import { SocialLinks } from '~/components/site/Social';
 import { work } from '~/content/work';
@@ -113,7 +114,10 @@ export function DeskIndex({
           <span className='text-muted'>{portfolio.location.city}</span>
         </div>
         <Fortune initial={fortune} className='site-footer-fortune' />
-        <SocialLinks className='flex gap-4 justify-self-end max-md:justify-self-start' />
+        <div className='flex flex-col items-end gap-1'>
+          <SocialLinks className='flex gap-4' />
+          <PoweredBy />
+        </div>
       </footer>
     </section>
   );

@@ -2,6 +2,7 @@ import { Link } from '@tanstack/react-router';
 import { portfolio } from '~/portfolio.config';
 import { Clock } from './Clock';
 import { Fortune } from './Fortune';
+import { PoweredBy } from './PoweredBy';
 import { SocialLinks } from './Social';
 
 /** The corner labels at the bottom of every inner page. */
@@ -18,6 +19,7 @@ export function SiteFooter({ fortune }: { fortune: number }) {
         <Link to='/' className='link text-muted'>
           Back to the desk
         </Link>
+        <PoweredBy />
       </div>
     </footer>
   );

@@ -1,3 +1,5 @@
+<a href="https://layerwise.app"><picture><source media="(prefers-color-scheme: dark)" srcset="https://layerwise.app/powered-by-dark.png"><img src="https://layerwise.app/powered-by.png" alt="Powered by Layerwise" width="174" height="28"></picture></a>
+
 # Deskside
 
 A portfolio template for product designers. The home page is one small 3D
@@ -5,6 +7,10 @@ scene: a beige 1980s computer and a glazed mug on a desk. A row of keys along
 the bottom changes what's on the computer's screen. Click the screen and the
 camera moves in and opens the case study as a normal page. Everything else is
 plain, fast HTML: a text index of the work, case studies, About, and Contact.
+
+Try the live demo at [deskside.layerwise.site](https://deskside.layerwise.site/).
+Deskside was built with [Layerwise](https://layerwise.app), and you can open it
+in Layerwise to make your own version.
 
 The sample owner, Sam Ibarra, and all eight projects are fictional. Replace
 them with your own (see [Make it yours](#make-it-yours)).
@@ -313,7 +319,7 @@ src/
     desk/                  # the home page desk and the 3D scene
     case/Blocks.tsx        # content block renderers
     frames/Phone.tsx       # device frame for screens and demos
-    site/                  # header, footer, clock, links
+    site/                  # header, footer, clock, links, Powered by Layerwise badge
   routes/                  # pages
   lib/contact*.ts          # contact form rules and server function
   db/schema.ts             # the contact_messages table
